@@ -14,7 +14,9 @@ type WebServer struct {
 	secret []byte
 }
 
-func NewWebServer(options ...func(*WebServer)) *WebServer {
+type option func(*WebServer)
+
+func NewWebServer(options ...option) *WebServer {
 
 	s := &WebServer{
 		logger: log.New(log.Writer(), "", log.LstdFlags),
@@ -28,9 +30,9 @@ func NewWebServer(options ...func(*WebServer)) *WebServer {
 	return s
 }
 
-func AddOptions(s *WebServer, options ...func(*WebServer)) {
-	for _, option := range options {
-		option(s)
+func AddOptions(s *WebServer, options ...option) {
+	for _, opt := range options {
+		opt(s)
 	}
 }
 
