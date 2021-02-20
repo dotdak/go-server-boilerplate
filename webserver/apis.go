@@ -18,6 +18,8 @@ func LoadAPI(s *WebServer) *echo.Echo {
 
 func apiHello(s *WebServer) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		s.Bolt.Open()
+		defer s.Bolt.Close()
 		return c.JSON(http.StatusOK, "hello")
 	}
 }

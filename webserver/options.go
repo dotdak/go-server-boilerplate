@@ -4,7 +4,7 @@ import (
 	"log"
 )
 
-func LoadConfig(path string) func(s *WebServer) {
+func SetConfig(path string) func(s *WebServer) {
 	return func(s *WebServer) {
 		config, err := LoadConfigFromFile(path)
 		if err != nil {
@@ -21,8 +21,14 @@ func SetSecret(secret []byte) func(s *WebServer) {
 	}
 }
 
-func DefaultLogger() func(s *WebServer) {
+func SetLogger(logger *log.Logger) func(s *WebServer) {
 	return func(s *WebServer) {
-		s.logger = log.New(log.Writer(), "", log.LstdFlags)
+		s.logger = logger
+	}
+}
+
+func LoadBoltDB() func(s *WebServer) {
+	return func(s *WebServer) {
+		s.Bolt = NewBolter(s.config.BoltDB.Path, s.logger)
 	}
 }
